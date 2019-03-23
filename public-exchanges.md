@@ -22,6 +22,33 @@ As soon as someone successfully purchases an item from the Stock Exchange, this 
 }
 ```
 
+### duels
+
+When the duel ends, the result is posted to this exchange.
+
+```javascript
+{
+  "winner": {
+    "id": "abcdefghkadsfkl3214",
+    "name": "Anime Sex Storm",
+    "tag": "NAN",
+    "castle": "🐉",
+    "level": 56,
+    "hp": 1
+  },
+  "loser": {
+    "id": "abcdefghkakjdhfaskd",
+    "name": "aShark",
+    "tag": "NOT",
+    "castle": "🦌",
+    "level": 57,
+    "hp": 0
+  },
+  "isChallenge": true,   // it is a challenge or plain arena
+  "isGuildDuel": true    // the result will affect guilds glory
+}
+```
+
 ### offers
 _Good intentions here, right guys? Guys...?_
 
@@ -80,7 +107,12 @@ Every 5 minutes, all the cheapest offers for every item on offer in the Stock Ex
 ### yellow_pages
 _Comes by a bit more frequently than once a year_
 
-Every 5 minutes, this exchange will receive a list of all the player shops that are open and published.
+Every 5 minutes, this exchange will receive a list of all the player shops that are open and published. 
+
+Specialization field makes it percentagewise clear in what kind of gear this particular blacksmith is skilled in.
+
+While processing this digest, you shall take into the account target customer's guild and castle, as the final price might differ by guild/castle discount percent that may or may not be set.
+
 ```javascript
 [
   {
@@ -111,7 +143,13 @@ Every 5 minutes, this exchange will receive a list of all the player shops that 
         "price": 80,
         "mana": 150
       }
-    ]
+    ],
+    "specialization": {
+        "coat": 34,
+        "helmet": 75
+    },
+    "guildDiscount": 15,
+    "castleDiscount": 7
   }    
 ]
 ```
@@ -119,18 +157,26 @@ Every 5 minutes, this exchange will receive a list of all the player shops that 
 ### au_digest
 _I'll buy this one and that one! Wait! Stop outbidding your own teammates!_
 
-Every 3 minutes, a list of all active auction lots will be sent to this exchange.
+Every 3 minutes, a list of all active and finished during last hour auction lots will be sent to this exchange.
 ```javascript
 [
  {
     "lotId": "71499",
     "itemName": "Hunter dagger",
     "sellerName": "E them Up",
+    "quality": "Fine",
     "sellerCastle": "🦌",
     "endAt": "2018-07-15T20:23:38.217Z",
     "startedAt": "2018-07-15T16:20:16.851Z",
     "buyerCastle": "🦌",
-    "price": 9
+    "status": "Active", // one of Active / Finished / Cancelled 
+    "finishedAt": "2018-07-15T16:20:16.851Z", // only for ended auctions
+    "buyerName": "Shortspear", // only for finished auctions
+    "price": 9,
+    "stats" : {
+        "⚔": 4,
+        "🎒": 3
+    }
   },
   {
     "lotId": "71500",
